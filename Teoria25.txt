@@ -1,0 +1,5 @@
+Jeśli useEffect z funkcją fetch() zostanie napisany bez tablicy zależności, efekt ten będzie uruchamiał się po każdym renderowaniu komponentu. React nie ma wtedy żadnej instrukcji, kiedy ma pominąć wykonanie tego kodu, więc odpala go przy każdej, nawet najmniejszej zmianie.
+
+Mechanizm pętli nieskończonej działa w tym przypadku następująco: komponent renderuje się po raz pierwszy -> useEffect się uruchamia -> fetch() pobiera dane z API -> po odebraniu danych wywołujesz funkcję ustawiającą stan (np. setData) -> zmiana stanu automatycznie zmusza Reacta do ponownego wyrenderowania komponentu -> z powodu braku tablicy zależności useEffect odpala się znowu -> następuje kolejny fetch() i ponowna zmiana stanu, co zamyka pętlę w nieskończoność.
+
+Jest to ogromny problem dla aplikacji z kilku powodów: drastycznie obciąża procesor klienta, powodując zawieszenie lub spowolnienie przeglądarki. Dodatkowo aplikacja wysyła tysiące zapytań na sekundę do serwera, co może doprowadzić do zablokowania naszego adresu IP (rate limiting) lub wygenerowania ogromnych kosztów za utrzymanie infrastruktury API.
